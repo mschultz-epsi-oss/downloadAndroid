@@ -2,6 +2,9 @@ package com.example.melvin.download;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -14,6 +17,8 @@ import com.android.volley.toolbox.Volley;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
+    private EditText urlInput;
+    private Button buttonDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +26,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.text_view);
+        urlInput = (EditText) findViewById(R.id.editText);
+        buttonDownload = (Button) findViewById(R.id.button_download);
 
-        this.downloadDataFromUrl(textView);
+        buttonDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadDataFromUrl(textView, urlInput.getText().toString());
+            }
+        });
     }
 
-    public void downloadDataFromUrl(final TextView textView) {
+    public void downloadDataFromUrl(final TextView textView, String url) {
         RequestQueue _requestQueue = Volley.newRequestQueue(this);
-        String url = "http://www.google.fr";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -38,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    textView.setText("That didn't work !");
+                    textView.setText("That didn't work ! Please verify url of your target !");
                 }
             });
 
